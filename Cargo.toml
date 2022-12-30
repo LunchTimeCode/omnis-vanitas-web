@@ -1,8 +1,8 @@
 [package]
-name = "omnis-vanitas"
+name = "omnis-vanitas-web"
 version = "0.0.0"
 edition = "2021"
-description = "omnis-vanitas"
+description = "omnis-vanitas-web"
 license = "Apache-2.0"
 keywords = ["frontend"]
 
@@ -16,8 +16,6 @@ eframe = { version = "0.20.0", default-features = false, features = [
     "glow",          # Use the glow rendering backend. Alternative: "wgpu".
     "persistence",   # Enable restoring app state when restarting the app.
 ] }
-translation-server-client-silen = "0.1.5"
-futures = "0.3"
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
 console_error_panic_hook = "0.1.6"

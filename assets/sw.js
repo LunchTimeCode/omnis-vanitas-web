@@ -2,8 +2,8 @@ var cacheName = 'omni-vanity-pwa';
 var filesToCache = [
   './',
   './index.html',
-  './omnis-vanitas.js',
-  './omnis-vanitas.wasm',
+  './omnis-vanitas-web.js',
+  './omnis-vanitas-web.wasm',
 ];
 
 /* Start the service worker and cache all of the app's content */
