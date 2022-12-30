@@ -1,6 +1,6 @@
 #![warn(clippy::all, rust_2018_idioms)]
 
-use omnis_vanitas_web::TemplateApp;
+use omnis_vanitas_web::WebApp;
 
 // when compiling to web using trunk.
 fn main() {
@@ -21,7 +21,7 @@ fn main() {
         eframe::start_web(
             "omni_vanitas_canvas", // hardcode it
             web_options,
-            Box::new(|cc| Box::new(TemplateApp::new(cc))),
+            Box::new(|cc| Box::new(WebApp::new(cc))),
         )
         .await
         .expect("failed to start eframe");
