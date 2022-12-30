@@ -19,6 +19,7 @@ jobs:
           toolchain: stable
           target: wasm32-unknown-unknown
           override: true
+      - uses: Swatinem/rust-cache@v2  
 
       - uses: taiki-e/install-action@cargo-binstall
       - run: cargo binstall --no-confirm --force just
