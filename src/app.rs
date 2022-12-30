@@ -37,11 +37,9 @@ impl WebApp {
 }
 
 impl eframe::App for WebApp {
-
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         eframe::set_value(storage, eframe::APP_KEY, self);
     }
-
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let Self { label, value } = self;
@@ -77,7 +75,6 @@ impl eframe::App for WebApp {
         if false {
             egui::Window::new("Window").show(ctx, |ui| {
                 ui.label("Windows can be moved by dragging them.");
-            
             });
         }
     }
