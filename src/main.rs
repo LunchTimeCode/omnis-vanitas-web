@@ -1,12 +1,10 @@
 #![warn(clippy::all, rust_2018_idioms)]
 
-
 use omnis_vanitas_web::TemplateApp;
-
 
 // when compiling to web using trunk.
 fn main() {
-    use eframe::{WebOptions, Theme, WebGlContextOption};
+    use eframe::{Theme, WebGlContextOption, WebOptions};
     // Make sure panics are logged using `console.error`.
     console_error_panic_hook::set_once();
 
@@ -18,7 +16,6 @@ fn main() {
         default_theme: Theme::Dark,
         webgl_context_option: WebGlContextOption::WebGl1,
     };
-
 
     wasm_bindgen_futures::spawn_local(async {
         eframe::start_web(
