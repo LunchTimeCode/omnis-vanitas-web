@@ -1,4 +1,4 @@
-var cacheName = 'omni-vanity-pwa';
+var cacheName = 'omni-vanity-web-pwa';
 var filesToCache = [
   './',
   './index.html',

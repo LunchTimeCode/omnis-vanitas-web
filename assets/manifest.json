@@ -1,6 +1,6 @@
 {
-  "name": "omni-vanity PWA",
-  "short_name": "omni-vanity-pwa",
+  "name": "omni-vanity-web PWA",
+  "short_name": "omni-vanity-web-pwa",
   "icons": [
     {
       "src": "./icon-256.png",
