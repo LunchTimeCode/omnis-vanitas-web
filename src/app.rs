@@ -7,7 +7,6 @@ use egui::Ui;
 pub struct WebApp {
     // Example stuff:
     selected: Apps,
-
 }
 
 impl Default for WebApp {
@@ -49,9 +48,7 @@ impl eframe::App for WebApp {
     }
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let Self {
-            selected
-        } = self;
+        let Self { selected } = self;
 
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
             ui.heading("");
