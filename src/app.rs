@@ -1,4 +1,3 @@
-use eframe::App;
 use egui::Ui;
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
@@ -7,20 +6,14 @@ use egui::Ui;
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct WebApp {
     // Example stuff:
-    label: String,
     selected: Apps,
 
-    // this how you opt-out of serialization of a member
-    #[serde(skip)]
-    pub value: f32,
 }
 
 impl Default for WebApp {
     fn default() -> Self {
         Self {
             // Example stuff:
-            label: "Hello World!".to_owned(),
-            value: 2.7,
             selected: Apps::Welcome,
         }
     }
@@ -57,9 +50,7 @@ impl eframe::App for WebApp {
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         let Self {
-            label,
-            selected,
-            value,
+            selected
         } = self;
 
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
