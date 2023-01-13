@@ -2,7 +2,6 @@
 
 use omnis_vanitas_web::WebApp;
 
-// when compiling to web using trunk.
 fn main() {
     use eframe::{Theme, WebGlContextOption, WebOptions};
     // Make sure panics are logged using `console.error`.
