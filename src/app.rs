@@ -93,12 +93,9 @@ impl eframe::App for WebApp {
                 Apps::Welcome => {
                     ui.heading("Welcome to my webapp");
                 }
-                Apps::RandomWalks => render_random_walk(
-                    ui,
-                    &mut self.selected_random_walks,
-                    walk_plot_state,
-                    steps,
-                ),
+                Apps::RandomWalks => {
+                    render_random_walk(ui, &mut self.selected_random_walks, walk_plot_state, steps)
+                }
                 Apps::Second => place_holder(ui),
                 Apps::Third => place_holder(ui),
             }
@@ -158,7 +155,7 @@ fn render_random_walk(
                 render_random_walk_one_dimension(ui, walk_plot_state, steps)
             }
             RandomWalkApps::TwoDimensons => {
-                render_random_walk_two_dimension(ui, walk_plot_state,  steps)
+                render_random_walk_two_dimension(ui, walk_plot_state, steps)
             }
         });
 
