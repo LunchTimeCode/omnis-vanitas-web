@@ -14,7 +14,10 @@ pub struct WebApp {
     selected: Apps,
 
     selected_random_walks: RandomWalkApps,
+    
+    #[serde(skip)]
     walk_plot_state: Vec<[f64; 2]>,
+
     steps: u64,
 }
 
