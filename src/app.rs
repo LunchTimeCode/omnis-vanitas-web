@@ -1,4 +1,9 @@
-use egui::Ui;
+use egui::{
+    plot::{Line, Plot, PlotPoints},
+    vec2, Ui,
+};
+
+use crate::random_cordinates;
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 ///
@@ -7,6 +12,8 @@ use egui::Ui;
 pub struct WebApp {
     // Example stuff:
     selected: Apps,
+    selected_random_walks: RandomWalkApps,
+    walk_plot_state: Vec<[f64; 2]>,
 }
 
 impl Default for WebApp {
@@ -14,6 +21,8 @@ impl Default for WebApp {
         Self {
             // Example stuff:
             selected: Apps::Welcome,
+            selected_random_walks: RandomWalkApps::OneDimension,
+            walk_plot_state: vec![[0.0, 0.0]],
         }
     }
 }
@@ -48,12 +57,16 @@ impl eframe::App for WebApp {
     }
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let Self { selected } = self;
+        let Self {
+            selected,
+            selected_random_walks: _,
+            walk_plot_state,
+        } = self;
 
         egui::SidePanel::left("side_panel").show(ctx, |ui| {
             ui.heading("");
 
-            egui::Grid::new("some_unique_id").show(ui, |ui| {
+            egui::Grid::new("apps_grid").show(ui, |ui| {
                 ui.horizontal(|ui| {
                     ui.label("Apps");
                 });
@@ -84,7 +97,7 @@ impl eframe::App for WebApp {
                     ui.heading("Welcome to my webapp");
                 }
                 Apps::RandomWalks => {
-                    ui.heading("Random Walks");
+                    render_random_walk(ui, &mut self.selected_random_walks, walk_plot_state)
                 }
                 Apps::Second => place_holder(ui),
                 Apps::Third => place_holder(ui),
@@ -103,4 +116,77 @@ impl eframe::App for WebApp {
 
 fn place_holder(ui: &mut Ui) {
     ui.heading("Place Holder");
+}
+
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+enum RandomWalkApps {
+    OneDimension,
+    TwoDimensons,
+}
+
+fn render_random_walk(
+    ui: &mut Ui,
+    selected_random_walks: &mut RandomWalkApps,
+    walk_plot_state: &mut Vec<[f64; 2]>,
+) {
+    egui::Grid::new("some_unique_id").show(ui, |ui| {
+        ui.horizontal(|ui| {
+            ui.heading("Random Walks");
+
+            egui::ComboBox::from_label("")
+                .selected_text(format!("{:?}", selected_random_walks))
+                .show_ui(ui, |ui| {
+                    ui.selectable_value(
+                        selected_random_walks,
+                        RandomWalkApps::OneDimension,
+                        "One dimensions",
+                    );
+                    ui.selectable_value(
+                        selected_random_walks,
+                        RandomWalkApps::TwoDimensons,
+                        "Two dimensions",
+                    );
+                });
+        });
+
+        ui.end_row();
+
+        ui.vertical(|ui| match selected_random_walks {
+            RandomWalkApps::OneDimension => render_random_walk_one_dimension(ui, walk_plot_state),
+            RandomWalkApps::TwoDimensons => {}
+        });
+
+        ui.end_row();
+    });
+}
+
+fn render_random_walk_one_dimension(ui: &mut Ui, walk_plot_state: &mut Vec<[f64; 2]>) {
+    ui.vertical(|ui| {
+        ui.add_space(20.0);
+        ui.horizontal(|ui| {
+            ui.heading("Actions");
+            ui.collapsing("Click to see what is hidden!", |ui| {
+                ui.horizontal_wrapped(|ui| {
+                    ui.horizontal(|ui| {
+                        if ui.button("random plot").clicked() {
+                            *walk_plot_state = random_cordinates();
+                        };
+                    });
+                });
+            });
+        });
+
+        ui.end_row();
+
+        ui.horizontal(|ui| {
+            let sin: PlotPoints = PlotPoints::from(walk_plot_state.clone());
+
+            let line = Line::new(sin);
+            Plot::new("my_plot")
+                .view_aspect(2.0)
+                .min_size(vec2(1000.0, 250.0))
+                .show(ui, |plot_ui| plot_ui.line(line));
+        });
+        ui.end_row();
+    });
 }
