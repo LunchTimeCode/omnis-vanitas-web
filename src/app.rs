@@ -156,42 +156,14 @@ fn render_random_walk(
     });
 }
 
-fn render_random_walk_two_dimension(
-    ui: &mut Ui,
-    walk_plot_state: &mut Vec<[f64; 2]>,
-    steps: &mut u64,
-) {
-    let cordinates = random_cordinates_two_dim(*steps);
-
-    ui.vertical(|ui| {
-        ui.add_space(20.0);
-        plot_actions(ui, walk_plot_state, cordinates);
-        ui.end_row();
-        plot_settings(ui, steps);
-        ui.end_row();
-        ui.horizontal(|ui| {
-            let sin: PlotPoints = PlotPoints::from(walk_plot_state.clone());
-
-            let line = Line::new(sin);
-            Plot::new("my_plot")
-                .view_aspect(2.0)
-                .min_size(vec2(1000.0, 250.0))
-                .show(ui, |plot_ui| plot_ui.line(line));
-        });
-        ui.end_row();
-    });
-}
-
 fn render_random_walk_one_dimension(
     ui: &mut Ui,
     walk_plot_state: &mut Vec<[f64; 2]>,
     steps: &mut u64,
 ) {
-    let cordinates = random_cordinates_one_dim(*steps);
-
     ui.vertical(|ui| {
         ui.add_space(20.0);
-        plot_actions(ui, walk_plot_state, cordinates);
+        plot_actions(ui, walk_plot_state, steps, 1);
         ui.end_row();
         plot_settings(ui, steps);
         ui.end_row();
@@ -209,13 +181,48 @@ fn render_random_walk_one_dimension(
     });
 }
 
-fn plot_actions(ui: &mut Ui, walk_plot_state: &mut Vec<[f64; 2]>, cordinates: Vec<[f64; 2]>) {
+fn render_random_walk_two_dimension(
+    ui: &mut Ui,
+    walk_plot_state: &mut Vec<[f64; 2]>,
+    steps: &mut u64,
+) {
+    ui.vertical(|ui| {
+        ui.add_space(20.0);
+        plot_actions(ui, walk_plot_state, steps, 2);
+        ui.end_row();
+        plot_settings(ui, steps);
+        ui.end_row();
+        ui.horizontal(|ui| {
+            let sin: PlotPoints = PlotPoints::from(walk_plot_state.clone());
+
+            let line = Line::new(sin);
+            Plot::new("my_plot")
+                .view_aspect(2.0)
+                .min_size(vec2(1000.0, 250.0))
+                .show(ui, |plot_ui| plot_ui.line(line));
+        });
+        ui.end_row();
+    });
+}
+
+fn plot_actions(
+    ui: &mut Ui,
+    walk_plot_state: &mut Vec<[f64; 2]>,
+    steps: &mut u64,
+    dimensions: u128,
+) {
     ui.horizontal(|ui| {
         ui.collapsing("Actions", |ui| {
             ui.horizontal_wrapped(|ui| {
                 ui.horizontal(|ui| {
                     if ui.button("walk").clicked() {
-                        *walk_plot_state = cordinates;
+                        let cords = match dimensions {
+                            1 => random_cordinates_one_dim(*steps),
+                            2 => random_cordinates_two_dim(*steps),
+                            _ => vec![],
+                        };
+
+                        *walk_plot_state = cords;
                     };
                 });
             });
