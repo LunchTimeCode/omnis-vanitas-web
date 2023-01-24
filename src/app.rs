@@ -1,12 +1,13 @@
 use egui::Ui;
 
-use crate::{walk_app::render_random_walk, WalkApp};
+use crate::{git_app::render_git_app, git_app::GitApp, walk_app::render_random_walk, WalkApp};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct WebApp {
     selected: Apps,
     walk_app: WalkApp,
+    git_app: GitApp,
 }
 
 impl Default for WebApp {
@@ -14,6 +15,7 @@ impl Default for WebApp {
         Self {
             selected: Apps::Welcome,
             walk_app: WalkApp::default(),
+            git_app: GitApp::default(),
         }
     }
 }
@@ -32,6 +34,7 @@ impl WebApp {
 enum Apps {
     Welcome,
     RandomWalks,
+    GitApps,
 }
 
 impl eframe::App for WebApp {
@@ -65,6 +68,9 @@ fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
             if ui.button("Random Walks").clicked() {
                 web_app.selected = Apps::RandomWalks;
             };
+            if ui.button("Git Apps").clicked() {
+                web_app.selected = Apps::GitApps;
+            };
         });
 
         ui.end_row();
@@ -77,6 +83,7 @@ fn render_selected(web_app: &mut WebApp, ui: &mut Ui) {
             ui.heading("Welcome to my webapp");
         }
         Apps::RandomWalks => render_random_walk(&mut web_app.walk_app, ui),
+        Apps::GitApps => render_git_app(&mut web_app.git_app, ui),
     }
 }
 
