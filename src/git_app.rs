@@ -61,7 +61,7 @@ fn render_tag_diff(app: &mut GitApp, ui: &mut Ui) {
         ui.add_space(20.0);
         actions(app, ui);
         ui.end_row();
-        settings(ui);
+        settings(app, ui);
         ui.label(&app.choosen.get_choosen_symbol_chain());
         ui.end_row();
     });
@@ -72,7 +72,7 @@ fn render_web_diff(app: &mut GitApp, ui: &mut Ui) {
         ui.add_space(20.0);
         actions(app, ui);
         ui.end_row();
-        settings(ui);
+        settings(app, ui);
         ui.end_row();
 
         ui.end_row();
@@ -96,19 +96,26 @@ fn actions(app: &mut GitApp, ui: &mut Ui) {
     });
 }
 
-fn settings(ui: &mut Ui) {
+fn settings(app: &mut GitApp, ui: &mut Ui) {
     ui.horizontal(|ui| {
         ui.collapsing("Settings", |ui| {
             ui.horizontal_wrapped(|ui| {
                 ui.horizontal(|ui| {
-                    ui.label("pattern");
+                    let mut cloned = app.choosen.get_choosen_symbols();
+                    for choosen in &mut cloned {
+                        ui.text_edit_singleline(&mut choosen.symbol);
+                        ui.add_space(2.0);
+                    }
+                    for new in cloned.clone() {
+                        app.choosen.choose(new)
+                    }
                 });
             });
-        });
+        })
     });
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct TagSymbol {
     order: u16,
     name: String,
@@ -133,6 +140,12 @@ pub struct ChoosenTagSymbols {
 impl ChoosenTagSymbols {
     fn choose(&mut self, choose: TagSymbol) {
         self.symbols.insert(choose.name.clone(), choose);
+    }
+
+    fn get_choosen_symbols(&mut self) -> Vec<TagSymbol> {
+        let mut values: Vec<TagSymbol> = self.symbols.values().cloned().collect();
+        values.sort_by(|a, b| a.order.cmp(&b.order));
+        values.into_iter().collect()
     }
 
     fn get_choosen_symbol_chain(&self) -> String {
