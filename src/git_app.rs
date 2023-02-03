@@ -7,6 +7,8 @@ pub struct GitApp {
     selected_gits_app: GitApps,
     #[serde(skip)]
     choosen: ChoosenTagSymbols,
+    #[serde(skip)]
+    choosen_other: ChoosenTagSymbols,
 }
 
 impl Default for GitApp {
@@ -14,6 +16,7 @@ impl Default for GitApp {
         Self {
             selected_gits_app: GitApps::TagDiffWeb,
             choosen: ChoosenTagSymbols::default(),
+            choosen_other: ChoosenTagSymbols::default(),
         }
     }
 }
@@ -89,6 +92,13 @@ fn actions(app: &mut GitApp, ui: &mut Ui) {
                         app.choosen.choose(TagSymbol::new(2, "delitmiter", "/"));
                         app.choosen
                             .choose(TagSymbol::new(3, "version", "someversion"));
+
+                        app.choosen_other
+                            .choose(TagSymbol::new(1, "prefix2", "something"));
+                        app.choosen_other
+                            .choose(TagSymbol::new(2, "delitmiter22", "/"));
+                        app.choosen_other
+                            .choose(TagSymbol::new(3, "version2", "someversion"));
                     };
                 });
             });
@@ -101,14 +111,24 @@ fn settings(app: &mut GitApp, ui: &mut Ui) {
         ui.collapsing("Settings", |ui| {
             ui.horizontal_wrapped(|ui| {
                 ui.horizontal(|ui| {
-                    let mut cloned = app.choosen.get_choosen_symbols();
-                    for choosen in &mut cloned {
-                        ui.text_edit_singleline(&mut choosen.symbol);
-                        ui.add_space(2.0);
-                    }
-                    for new in cloned.clone() {
-                        app.choosen.choose(new)
-                    }
+                        let mut cloned = app.choosen.get_choosen_symbols();
+                        for choosen in &mut cloned {
+                            ui.text_edit_singleline(&mut choosen.symbol);
+                            ui.add_space(2.0);
+                        }
+                        for new in cloned.clone() {
+                            app.choosen.choose(new)
+                        }
+
+                        let mut cloned_other = app.choosen_other.get_choosen_symbols();
+                        for choosen_other in &mut cloned_other {
+                            ui.text_edit_singleline(&mut choosen_other.symbol);
+                            ui.add_space(2.0);
+                        }
+                        for new in cloned_other.clone() {
+                            app.choosen_other.choose(new)
+                        }
+                
                 });
             });
         })
