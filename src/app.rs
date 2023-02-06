@@ -1,6 +1,6 @@
 use egui::Ui;
 
-use crate::{git_app::render_git_app, git_app::GitApp, walk_app::render_random_walk, WalkApp};
+use crate::{git_app_renders::render_git_app, git_app::GitApp, walk_app::render_random_walk, WalkApp};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -8,6 +8,7 @@ pub struct WebApp {
     selected: Apps,
     walk_app: WalkApp,
     git_app: GitApp,
+    dropped_files: Vec<egui::DroppedFile>,
 }
 
 impl Default for WebApp {
@@ -16,6 +17,7 @@ impl Default for WebApp {
             selected: Apps::Welcome,
             walk_app: WalkApp::default(),
             git_app: GitApp::default(),
+           dropped_files: Default::default()
         }
     }
 }
@@ -57,6 +59,80 @@ impl eframe::App for WebApp {
         });
     }
 }
+
+
+// example for file drag and drop
+//impl WebApp {
+  //  fn ui_file_drag_and_drop(&mut self, ctx: &egui::Context) {
+       // use egui::*;
+       // use std::fmt::Write as _;
+
+
+     //  if !ctx.in
+
+        // Preview hovering files:
+        //if !ctx.input(|i| i.raw.hovered_files.is_empty()) {
+          //  let text = ctx.input(|i| {
+           //     let mut text = "Dropping files:\n".to_owned();
+            //for file in &i.raw.hovered_files {
+              //      if let Some(path) = &file.path {
+                       // write!(text, "\n{}", path.display()).ok();
+                    //} else if !file.mime.is_empty() {
+                    //    write!(text, "\n{}", file.mime).ok();
+                   // } else {
+                    //    text += "\n???";
+                    //}
+                //}
+            //text
+           // });
+
+            //let painter =
+               // ctx.layer_painter(LayerId::new(Order::Foreground, Id::new("file_drop_target")));
+
+           // let screen_rect = ctx.screen_rect();
+            //painter.rect_filled(screen_rect, 0.0, Color32::from_black_alpha(192));
+            //painter.text(
+               // screen_rect.center(),
+               // Align2::CENTER_CENTER,
+               // text,
+               // TextStyle::Heading.resolve(&ctx.style()),
+               // Color32::WHITE,
+            //);
+        //}
+
+        // Collect dropped files:
+        //ctx.input(|i| {
+        //    if !i.raw.dropped_files.is_empty() {
+            //    self.dropped_files = i.raw.dropped_files.clone();
+            //}
+        //});
+
+        // Show dropped files (if any):
+        //if !self.dropped_files.is_empty() {
+          //  let mut open = true;
+          // egui::Window::new("Dropped files")
+               // .open(&mut open)
+               // .show(ctx, |ui| {
+                    //for file in &self.dropped_files {
+                      //  let mut info = if let Some(path) = &file.path {
+                          //  path.display().to_string()
+                       // } else if !file.name.is_empty() {
+                          //  file.name.clone()
+                       // } else {
+                        //    "???".to_owned()
+                       // };
+                        //if let Some(bytes) = &file.bytes {
+                        //    write!(info, " ({} bytes)", bytes.len()).ok();
+                        //}
+                        //ui.label(info);
+                    //}
+               // });
+            //if !open {
+             //   self.dropped_files.clear();
+            //}
+      //  }
+   // }
+//}
 
 fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
     egui::Grid::new("apps_grid").show(ui, |ui| {
