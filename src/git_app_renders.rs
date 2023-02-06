@@ -1,8 +1,9 @@
 use egui::Ui;
 
-use crate::{GitApp, git_app::{GitApps, TagSymbol}};
-
-
+use crate::{
+    git_app::{GitApps, TagSymbol},
+    GitApp,
+};
 
 pub fn render_git_app(app: &mut GitApp, ui: &mut Ui) {
     egui::Grid::new("git_apps_grid").show(ui, |ui| {

@@ -32,8 +32,6 @@ pub enum GitApps {
     TagDiffCommand,
 }
 
-
-
 #[derive(Clone, PartialEq)]
 pub struct TagSymbol {
     pub order: u16,
