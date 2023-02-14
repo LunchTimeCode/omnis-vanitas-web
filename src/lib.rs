@@ -11,3 +11,6 @@ pub use git_app_renders::render_git_app;
 mod random_cordinates;
 pub use random_cordinates::random_cordinates_one_dim;
 pub use random_cordinates::random_cordinates_two_dim;
+mod boids;
+pub use boids::render_boids;
+pub use boids::BoidApp;

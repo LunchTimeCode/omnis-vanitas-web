@@ -1,7 +1,8 @@
 use egui::Ui;
 
 use crate::{
-    git_app::GitApp, git_app_renders::render_git_app, walk_app::render_random_walk, WalkApp,
+    boids::BoidApp, git_app::GitApp, git_app_renders::render_git_app, render_boids,
+    walk_app::render_random_walk, WalkApp,
 };
 
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -10,6 +11,7 @@ pub struct WebApp {
     selected: Apps,
     walk_app: WalkApp,
     git_app: GitApp,
+    boid_app: BoidApp,
     dropped_files: Vec<egui::DroppedFile>,
 }
 
@@ -19,6 +21,7 @@ impl Default for WebApp {
             selected: Apps::Welcome,
             walk_app: WalkApp::default(),
             git_app: GitApp::default(),
+            boid_app: BoidApp::default(),
             dropped_files: Default::default(),
         }
     }
@@ -39,6 +42,7 @@ enum Apps {
     Welcome,
     RandomWalks,
     GitApps,
+    BoidApp,
 }
 
 impl eframe::App for WebApp {
@@ -75,6 +79,9 @@ fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
             if ui.button("Git Apps").clicked() {
                 web_app.selected = Apps::GitApps;
             };
+            if ui.button("Boid App").clicked() {
+                web_app.selected = Apps::BoidApp;
+            };
         });
 
         ui.end_row();
@@ -88,6 +95,7 @@ fn render_selected(web_app: &mut WebApp, ui: &mut Ui) {
         }
         Apps::RandomWalks => render_random_walk(&mut web_app.walk_app, ui),
         Apps::GitApps => render_git_app(&mut web_app.git_app, ui),
+        Apps::BoidApp => render_boids(&mut web_app.boid_app, ui),
     }
 }
 
