@@ -21,16 +21,10 @@ impl Default for BoidApp {
     }
 }
 
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(serde::Deserialize, serde::Serialize, Default)]
 #[serde(default)]
 struct BoidsSettings {
     amount: u32,
-}
-
-impl Default for BoidsSettings {
-    fn default() -> Self {
-        Self { amount: 0 }
-    }
 }
 
 struct Field {
@@ -49,9 +43,9 @@ impl Field {
     pub fn move_boid(&mut self, id: &u16) -> Result<String, String> {
         let boid_to_move = self
             .state
-            .get_mut(&id)
-            .map_or(Err("could not find boid"), |b| Ok(b))?;
-        let id = boid_to_move.id.clone();
+            .get_mut(id)
+            .map_or(Err("could not find boid"), Ok)?;
+        let id = boid_to_move.id;
 
         //apply rules and move boid depending on the others, adding a boid etc.
         boid_to_move.position = [1.0, 1.0];
