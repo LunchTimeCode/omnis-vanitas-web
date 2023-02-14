@@ -51,3 +51,11 @@ check-all:
 	cargo clippy -- -D warnings
 	cargo check --all-features --lib --target wasm32-unknown-unknown
 
+git message:
+	cargo fmt
+	just lint
+	git add .
+	git commit -m "{{message}}"
+	git push
+
+
