@@ -30,7 +30,7 @@ impl Default for BoidApp {
 #[derive(serde::Deserialize, serde::Serialize, Default)]
 #[serde(default)]
 struct BoidsSettings {
-    amount: u32,
+    amount: u16,
 }
 
 struct Field {
@@ -38,15 +38,15 @@ struct Field {
 }
 
 impl Field {
-    pub fn move_all_once(&mut self) -> Result<String, String> {
+    pub fn move_all_once(&mut self, settings: &BoidsSettings) -> Result<String, String> {
         let ids: Vec<u16> = self.state.keys().cloned().into_iter().collect();
         for id in ids {
-            let _ = self.move_boid(&id);
+            let _ = self.move_boid(&id, settings);
         }
         Ok("moved all boids".to_owned())
     }
 
-    pub fn move_boid(&mut self, id: &u16) -> Result<String, String> {
+    pub fn move_boid(&mut self, id: &u16, settings: &BoidsSettings) -> Result<String, String> {
         let boid_to_move = self
             .state
             .get_mut(id)
@@ -55,7 +55,10 @@ impl Field {
 
         //apply rules and move boid depending on the others, adding a boid etc.
         boid_to_move.position = [1.0, 1.0];
-        let _ = self.add_boid(1, [1.0, 1.0]);
+
+        for i in 0..settings.amount {
+            let _ = self.add_boid(i, [1.0, 1.0]);
+        }
 
         Ok(format!["moved boid {}", id])
     }
@@ -82,7 +85,8 @@ impl Boid {
 }
 
 pub fn render_boids(app: &mut BoidApp, ui: &mut Ui) {
-    let _ = app.field.move_all_once();
+    app.settings.amount = 1;
+    let _ = app.field.move_all_once(&app.settings);
 
     render_plot_via_boid_field(app);
 
