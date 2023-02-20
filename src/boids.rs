@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use egui::Ui;
+use egui::{
+    plot::{Line, Plot, PlotPoints},
+    vec2, Ui,
+};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -8,6 +11,8 @@ pub struct BoidApp {
     settings: BoidsSettings,
     #[serde(skip)]
     field: Field,
+    #[serde(skip)]
+    boid_plot_state: Vec<[f64; 2]>,
 }
 
 impl Default for BoidApp {
@@ -17,6 +22,7 @@ impl Default for BoidApp {
             field: Field {
                 state: HashMap::new(),
             },
+            boid_plot_state: vec![],
         }
     }
 }
@@ -63,6 +69,7 @@ impl Field {
     }
 }
 
+#[derive(Clone)]
 struct Boid {
     id: u16,
     position: [f64; 2],
@@ -74,6 +81,47 @@ impl Boid {
     }
 }
 
-pub fn render_boids(app: &mut BoidApp, _ui: &mut Ui) {
+pub fn render_boids(app: &mut BoidApp, ui: &mut Ui) {
     let _ = app.field.move_all_once();
+
+    render_plot_via_boid_field(app);
+
+    ui.horizontal(|ui| {
+        let sin: PlotPoints = PlotPoints::from(app.boid_plot_state.clone());
+
+        let line = Line::new(sin);
+        Plot::new("boids_plot")
+            .view_aspect(2.0)
+            .min_size(vec2(1000.0, 250.0))
+            .show(ui, |plot_ui| plot_ui.line(line));
+    });
+}
+
+fn render_plot_via_boid_field(app: &mut BoidApp) {
+    let to_render: Vec<Boid> = app.field.state.values().cloned().collect();
+
+    let new_render_state: &mut Vec<[f64; 2]> = &mut vec![];
+
+    for boid in to_render {
+        let state = render_boid(boid);
+        for point in state {
+            new_render_state.push(point);
+        }
+    }
+
+    app.boid_plot_state = new_render_state.to_vec()
+}
+
+fn render_boid(boid: Boid) -> Vec<[f64; 2]> {
+    let boid_pos = boid.position;
+
+    let to_right = [(boid_pos[0] + 1.0), (boid_pos[1])];
+
+    let to_up = [(boid_pos[0]), (boid_pos[1] + 1.0)];
+
+    let to_left = [(boid_pos[0] - 1.0), (boid_pos[1])];
+
+    let to_down = [(boid_pos[0]), (boid_pos[1] - 1.0)];
+
+    vec![to_right, to_up, boid_pos, to_left, to_down]
 }
