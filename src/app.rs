@@ -1,9 +1,7 @@
 use egui::Ui;
+use omni_randomwalk::{render_random_walk, WalkApp};
 
-use crate::{
-    boids::BoidApp, git_app::GitApp, git_app_renders::render_git_app, render_boids,
-    walk_app::render_random_walk, WalkApp,
-};
+use crate::{boids::BoidApp, git_app::GitApp, git_app_renders::render_git_app, render_boids};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
