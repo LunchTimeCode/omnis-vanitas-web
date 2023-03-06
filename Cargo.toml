@@ -24,7 +24,7 @@ wasm-bindgen-futures = "0.4"
 rand = "0.8.5"
 getrandom = { version = "0.2", features = ["js"] }
 
-omni-randomwalk = "0.0.2"
+omni-randomwalk = "0.0.3"
 
 [profile.release]
 opt-level = 2 # fast and small wasm
