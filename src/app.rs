@@ -8,7 +8,6 @@ pub struct WebApp {
     selected: Apps,
     walk_app: WalkApp,
     git_app: GitApp,
-    dropped_files: Vec<egui::DroppedFile>,
 }
 
 impl Default for WebApp {
@@ -17,7 +16,6 @@ impl Default for WebApp {
             selected: Apps::Welcome,
             walk_app: WalkApp::default(),
             git_app: GitApp::default(),
-            dropped_files: Default::default(),
         }
     }
 }
@@ -64,15 +62,36 @@ fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
     egui::Grid::new("apps_grid").show(ui, |ui| {
         ui.horizontal(|ui| {
             ui.heading("Applications");
-            if ui.button("Welcome").clicked() {
+
+            if ui
+                .add(egui::SelectableLabel::new(
+                    web_app.selected == Apps::Welcome,
+                    "Welcome",
+                ))
+                .clicked()
+            {
                 web_app.selected = Apps::Welcome;
-            };
-            if ui.button("Random Walks").clicked() {
+            }
+
+            if ui
+                .add(egui::SelectableLabel::new(
+                    web_app.selected == Apps::RandomWalks,
+                    "Random Walks",
+                ))
+                .clicked()
+            {
                 web_app.selected = Apps::RandomWalks;
-            };
-            if ui.button("Git Apps").clicked() {
+            }
+
+            if ui
+                .add(egui::SelectableLabel::new(
+                    web_app.selected == Apps::GitApps,
+                    "Git Apps",
+                ))
+                .clicked()
+            {
                 web_app.selected = Apps::GitApps;
-            };
+            }
         });
 
         ui.end_row();
