@@ -1,3 +1,4 @@
+use crate::{render_welcome, WelcomeApp};
 use egui::Ui;
 use omni_git::{render_git_app, GitApp};
 use omni_randomwalk::{render_random_walk, WalkApp};
@@ -6,6 +7,7 @@ use omni_randomwalk::{render_random_walk, WalkApp};
 #[serde(default)]
 pub struct WebApp {
     selected: Apps,
+    welcome_app: WelcomeApp,
     walk_app: WalkApp,
     git_app: GitApp,
 }
@@ -14,6 +16,7 @@ impl Default for WebApp {
     fn default() -> Self {
         Self {
             selected: Apps::Welcome,
+            welcome_app: WelcomeApp::default(),
             walk_app: WalkApp::default(),
             git_app: GitApp::default(),
         }
@@ -61,8 +64,6 @@ impl eframe::App for WebApp {
 fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
     egui::Grid::new("apps_grid").show(ui, |ui| {
         ui.horizontal(|ui| {
-            ui.heading("Applications");
-
             if ui
                 .add(egui::SelectableLabel::new(
                     web_app.selected == Apps::Welcome,
@@ -100,9 +101,7 @@ fn render_selection(web_app: &mut WebApp, ui: &mut Ui) {
 
 fn render_selected(web_app: &mut WebApp, ui: &mut Ui) {
     match web_app.selected {
-        Apps::Welcome => {
-            ui.heading("Welcome to my webapp");
-        }
+        Apps::Welcome => render_welcome(&mut web_app.welcome_app, ui),
         Apps::RandomWalks => render_random_walk(&mut web_app.walk_app, ui),
         Apps::GitApps => render_git_app(&mut web_app.git_app, ui),
     }
