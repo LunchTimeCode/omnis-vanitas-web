@@ -1,4 +1,5 @@
-use egui::Ui;
+use egui::RichText;
+use egui::{TextStyle, Ui};
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct WelcomeApp {
@@ -21,47 +22,53 @@ impl Default for WelcomeApp {
 }
 
 pub fn render_welcome(welcome_app: &mut WelcomeApp, ui: &mut Ui) {
-    ui.vertical(|ui| {
-        ui.horizontal_top(|ui| {
-            if ui
-                .add(egui::SelectableLabel::new(
-                    welcome_app.selected == WebPage::Me,
-                    "Me",
-                ))
-                .clicked()
-            {
-                welcome_app.selected = WebPage::Me;
-            }
+    ui.spacing_mut().item_spacing.x = 1.0;
+    ui.with_layout(egui::Layout::top_down(egui::Align::TOP), |ui| {
+        ui.vertical(|ui| {
+            ui.horizontal_top(|ui| {
+                let me = RichText::from("Me").text_style(TextStyle::Heading);
+                let cv = RichText::from("cv").text_style(TextStyle::Heading);
+                let blog = RichText::from("blog").text_style(TextStyle::Heading);
+                if ui
+                    .add(egui::SelectableLabel::new(
+                        welcome_app.selected == WebPage::Me,
+                        me,
+                    ))
+                    .clicked()
+                {
+                    welcome_app.selected = WebPage::Me;
+                }
 
-            if ui
-                .add(egui::SelectableLabel::new(
-                    welcome_app.selected == WebPage::CV,
-                    "CV",
-                ))
-                .clicked()
-            {
-                welcome_app.selected = WebPage::CV;
-            }
+                if ui
+                    .add(egui::SelectableLabel::new(
+                        welcome_app.selected == WebPage::CV,
+                        cv,
+                    ))
+                    .clicked()
+                {
+                    welcome_app.selected = WebPage::CV;
+                }
 
-            if ui
-                .add(egui::SelectableLabel::new(
-                    welcome_app.selected == WebPage::Blog,
-                    "Blog",
-                ))
-                .clicked()
-            {
-                welcome_app.selected = WebPage::Blog;
-            }
-            ui.end_row();
-        });
+                if ui
+                    .add(egui::SelectableLabel::new(
+                        welcome_app.selected == WebPage::Blog,
+                        blog,
+                    ))
+                    .clicked()
+                {
+                    welcome_app.selected = WebPage::Blog;
+                }
+                ui.end_row();
+            });
 
-        ui.horizontal_centered(|ui| {
-            match welcome_app.selected {
-                WebPage::Me => render_me(welcome_app, ui),
-                WebPage::CV => render_cv(welcome_app, ui),
-                WebPage::Blog => render_blog(welcome_app, ui),
-            }
-            ui.end_row();
+            ui.horizontal_top(|ui| {
+                match welcome_app.selected {
+                    WebPage::Me => render_me(welcome_app, ui),
+                    WebPage::CV => render_cv(welcome_app, ui),
+                    WebPage::Blog => render_blog(welcome_app, ui),
+                }
+                ui.end_row();
+            });
         });
     });
 }
