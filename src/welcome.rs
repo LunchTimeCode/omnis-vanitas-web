@@ -22,13 +22,13 @@ impl Default for WelcomeApp {
 }
 
 pub fn render_welcome(welcome_app: &mut WelcomeApp, ui: &mut Ui) {
-    ui.spacing_mut().item_spacing.x = 1.0;
     ui.with_layout(egui::Layout::top_down(egui::Align::TOP), |ui| {
         ui.vertical(|ui| {
             ui.horizontal_top(|ui| {
+                ui.spacing_mut().item_spacing.x = 3.0;
                 let me = RichText::from("Me").text_style(TextStyle::Heading);
-                let cv = RichText::from("cv").text_style(TextStyle::Heading);
-                let blog = RichText::from("blog").text_style(TextStyle::Heading);
+                let cv = RichText::from("CV").text_style(TextStyle::Heading);
+                let blog = RichText::from("Blog").text_style(TextStyle::Heading);
                 if ui
                     .add(egui::SelectableLabel::new(
                         welcome_app.selected == WebPage::Me,

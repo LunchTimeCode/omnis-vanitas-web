@@ -49,7 +49,6 @@ impl eframe::App for WebApp {
         });
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.add_space(20.0);
             render_selected(self, ui);
             render_powered_by(ui);
             egui::warn_if_debug_build(ui);
