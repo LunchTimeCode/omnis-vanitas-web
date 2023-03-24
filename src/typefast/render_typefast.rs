@@ -33,23 +33,23 @@ pub fn render_sentence(ui: &mut Ui) {
 
 pub fn render_text(app: &mut TypeFastApp, ui: &mut Ui) {
     if app.challenge_text.is_empty() {
-        app.challenge_text = random_letters(app.times).clone()
+        app.challenge_text = random_letters(app.times)
     }
 
     // clear after win
     if app.input_text.eq(&app.challenge_text) {
         app.input_text.clear();
         app.challenge_text.clear();
-        app.score = app.score + 1
+        app.score += 1
     }
 
-    let challenge_text = RichText::new(&app.challenge_text.to_string()).size(90.0);
+    let challenge_text = RichText::new(app.challenge_text.to_string()).size(90.0);
     ui.heading(challenge_text);
-    let input_text = RichText::new(&app.input_text.to_string()).size(90.0);
+    let input_text = RichText::new(app.input_text.to_string()).size(90.0);
     ui.heading(input_text);
     ui.text_edit_multiline(&mut app.input_text);
 
-    let score = RichText::new(&app.score.to_string()).size(90.0);
+    let score = RichText::new(app.score.to_string()).size(90.0);
     ui.heading(score);
 }
 
@@ -107,7 +107,7 @@ fn random_letters(max: u32) -> String {
     let mut rng = rand::thread_rng();
     let mut s: String = "".into();
     for _i in 0..max {
-        let letter: char = rng.gen_range(b'A'..b'Z') as char;
+        let letter: char = rng.gen_range(b'A'..=b'Z') as char;
         let manipulated = big_small_space(letter);
         s.push(manipulated)
     }
