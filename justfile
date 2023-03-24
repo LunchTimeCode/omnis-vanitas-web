@@ -44,7 +44,7 @@ release *args:
 	npx semantic-release {{args}}  
 
 web:
-	trunk serve	
+	trunk serve
 
 check-all:
 	cargo fmt --all --check

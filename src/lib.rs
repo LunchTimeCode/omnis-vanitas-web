@@ -1,8 +1,7 @@
 #![warn(clippy::all, rust_2018_idioms)]
 
 mod app;
-pub use app::WebApp;
+mod typefast;
 
-mod welcome;
-pub use welcome::render_welcome;
-pub use welcome::WelcomeApp;
+pub use app::WebApp;
+pub use typefast::TypeFastApp;

@@ -22,7 +22,6 @@ console_error_panic_hook = "0.1.6"
 tracing-wasm = "0.2"
 wasm-bindgen-futures = "0.4"
 rand = "0.8.5"
-getrandom = { version = "0.2", features = ["js"] }
 
 omni-randomwalk = "0.0.3"
 omni-git = "0.0.3"
