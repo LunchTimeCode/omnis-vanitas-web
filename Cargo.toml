@@ -20,7 +20,7 @@ eframe = { version = "0.20.0", default-features = false, features = [
 serde = { version = "1", features = ["derive"] }
 console_error_panic_hook = "0.1.6"
 tracing-wasm = "0.2"
-wasm-bindgen-futures = "0.4"
+wasm-bindgen-futures = "0.4.42"
 rand = "0.8.5"
 
 omni-randomwalk = "0.0.3"
