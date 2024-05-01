@@ -17,7 +17,7 @@ eframe = { version = "0.20.0", default-features = false, features = [
     "persistence",   # Enable restoring app state when restarting the app.
 ] }
 # You only need serde if you want app persistence:
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1.0.200", features = ["derive"] }
 console_error_panic_hook = "0.1.6"
 tracing-wasm = "0.2"
 wasm-bindgen-futures = "0.4"
