@@ -19,7 +19,7 @@ eframe = { version = "0.20.0", default-features = false, features = [
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
 console_error_panic_hook = "0.1.6"
-tracing-wasm = "0.2"
+tracing-wasm = "0.2.1"
 wasm-bindgen-futures = "0.4"
 rand = "0.8.5"
 
